@@ -5,7 +5,7 @@ import uuid
 import models
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, DateTime, String
 
 
 Base = declarative_base()
@@ -46,6 +46,10 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
+    def delete(self):
+        """ Delete current instance from storage. """
+        models.storage.delete(self)
+
     def to_dict(self):
         """Convert instance into dict format"""
         dictionary = {}
@@ -57,7 +61,3 @@ class BaseModel:
         if '_sa_instance_state' in my_dict.keys():
             del my_dict['_sa_instance_state']
         return dictionary
-
-     def delete(self):
-        """ Delete current instance from storage. """
-        models.storage.delete(self)
