@@ -60,19 +60,6 @@ class DBStorage:
                     new_dict[key] = obj
         return (new_dict)
 
-#        if cls is None:
-#            objects = self.__session.query(State).all()
-#            objects.extend(self.__session.query(City).all())
-#            objects.extend(self.__session.query(User).all())
-#            objects.extend(self.__session.query(Amenity).all())
-#            objects.extend(self.__session.query(Place).all())
-#            objects.extend(self.__session.query(Review).all())
-#        else:
-#            if type(cls) == str:
-#                cls = eval(cls)
-#            objects = self.__session.query(cls)
-#        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
-
     def new(self, obj):
         """ add the object to the current database session """
         local_obj = self.__session.merge(obj)
