@@ -343,5 +343,22 @@ class HBNBCommand(cmd.Cmd):
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
 
+    @staticmethod
+    def is_int(n):
+        """ checks if integer"""
+        try:
+            int(n)
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def is_float(n):
+        try:
+            float(n)
+            return True
+        except ValueError:
+            return False
+
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
