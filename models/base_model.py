@@ -64,12 +64,6 @@ class BaseModel:
         if "_sa_instance_state" in new_dict:
             new_dict.pop("_sa_instance_state", None)
         return new_dict
-#        my_dict = self.__dict__.copy()
-#        my_dict["__class__"] = str(type(self).__name__)
-#        my_dict["created_at"] = self.created_at.isoformat()
-#        my_dict["updated_at"] = self.updated_at.isoformat()
-#        my_dict.pop("_sa_instance_state", None)
-#        return my_dict
 
     def delete(self):
         """deletes the current instance from the storage"""
