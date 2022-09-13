@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
@@ -113,41 +114,37 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def _key_value_parser(self, args):
-        """creates a dictionary from a list of strings"""
-        new_dict = {}
-        for arg in args:
-            if "=" in arg:
-                kvp = arg.split('=', 1)
-                key = kvp[0]
-                value = kvp[1]
-                if value[0] == value[-1] == '"':
-                    value = shlex.split(value)[0].replace('_', ' ')
-                else:
-                    try:
-                        value = int(value)
-                    except:
-                        try:
-                            value = float(value)
-                        except:
-                            continue
-                new_dict[key] = value
-        return new_dict
-
     def do_create(self, arg):
         """Creates a new instance of a class"""
-        args = arg.split()
-        if len(args) == 0:
+        try:
+            if not line:
+                raise SyntaxError()
+            my_list = line.split(" ")
+
+            kwargs = {}
+            for i in range(1, len(my_list)):
+                key, value = tuple(my_list[i].split("="))
+                if value[0] == '"':
+                    value = value.strip('"').replace("_", " ")
+                else:
+                    try:
+                        value = eval(value)
+                    except (SyntaxError, NameError):
+                        continue
+                kwargs[key] = value
+
+            if kwargs == {}:
+                obj = eval(my_list[0])()
+            else:
+                obj = eval(my_list[0])(**kwargs)
+                storage.new(obj)
+            print(obj.id)
+            obj.save()
+
+        except SyntaxError:
             print("** class name missing **")
-            return False
-        if args[0] in classes:
-            new_dict = self._key_value_parser(args[1:])
-            instance = classes[args[0]](**new_dict)
-        else:
+        except NameError:
             print("** class doesn't exist **")
-            return False
-        print(instance.id)
-        instance.save()
 
     def help_create(self):
         """ Help information for the create method """
