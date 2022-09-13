@@ -2,7 +2,8 @@
 """ Console Module """
 import cmd
 import sys
-from datetime import datetime
+import models
+from shlex import split
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -11,7 +12,12 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-from shlex import split
+
+
+classes = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
+           'State': State, 'City': City, 'Amenity': Amenity,
+           'Review': Review
+           }
 
 
 class HBNBCommand(cmd.Cmd):
@@ -19,12 +25,6 @@ class HBNBCommand(cmd.Cmd):
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-
-    classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
@@ -118,35 +118,33 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """Creates a new instance of a class"""
         try:
-            if not args:
+            if not arg:
                 raise SyntaxError()
-            my_list = args.split(" ")
-
-            if my_list:
-                cls_name = my_list[0]
-            else:
-                raise SyntaxError()
+            my_params = arg.split(" ")
 
             kwargs = {}
-
-            for pair in my_list[1:]:
-                k, v = pair.split("=")
-                if self.is_int(v):
-                    kwargs[k] = int(v)
-                elif self.is_float(v):
-                    kwargs[k] = float(v)
+            for i in range(1, len(my_params)):
+                key, value = tuple(my_params[i].split("="))
+                if value[0] == '"':
+                    value = value.strip('"').replace("_", " ")
                 else:
-                    v = v.replace('_', ' ')
-                    kwargs[k] = v.strip('"\'')
+                    try:
+                        value = eval(value)
+                    except(SyntaxError, NameError):
+                        continue
+                kwargs[key] = value
 
-            obj = self.classes[cls_name](**kwargs)
-            storage.new(obj)
-            obj.save()
+            if kwargs == {}:
+                obj = eval(my_params[0])()
+            else:
+                obj = eval(my_params[0])(**kwargs)
+                storage.new(obj)
             print(obj.id)
+            obj.save()
 
         except SyntaxError:
             print("** class name missing **")
-        except KeyError:
+        except NameError:
             print("** class doesn't exist **")
 
     def help_create(self):
