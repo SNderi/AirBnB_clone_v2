@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from datetime import datetime
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -114,36 +115,38 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, arg):
+    def do_create(self, args):
         """Creates a new instance of a class"""
         try:
-            if not line:
+            if not args:
                 raise SyntaxError()
-            my_list = line.split(" ")
+            my_list = args.split(" ")
+
+            if my_list:
+                cls_name = my_list[0]
+            else:
+                raise SyntaxError()
 
             kwargs = {}
-            for i in range(1, len(my_list)):
-                key, value = tuple(my_list[i].split("="))
-                if value[0] == '"':
-                    value = value.strip('"').replace("_", " ")
-                else:
-                    try:
-                        value = eval(value)
-                    except (SyntaxError, NameError):
-                        continue
-                kwargs[key] = value
 
-            if kwargs == {}:
-                obj = eval(my_list[0])()
-            else:
-                obj = eval(my_list[0])(**kwargs)
-                storage.new(obj)
-            print(obj.id)
+            for pair in my_list[1:]:
+                k, v = pair.split("=")
+                if self.is_int(v):
+                    kwargs[k] = int(v)
+                elif self.is_float(v):
+                    kwargs[k] = float(v)
+                else:
+                    v = v.replace('_', ' ')
+                    kwargs[k] = v.strip('"\'')
+
+            obj = self.classes[cls_name](**kwargs)
+            storage.new(obj)
             obj.save()
+            print(obj.id)
 
         except SyntaxError:
             print("** class name missing **")
-        except NameError:
+        except KeyError:
             print("** class doesn't exist **")
 
     def help_create(self):
