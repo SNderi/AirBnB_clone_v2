@@ -115,29 +115,40 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        c_name = c_param = ""
-        args = args.strip().split(" ")
-        if args[0]:
-            c_name = args[0]
-        else:
+        try:
+            if not line:
+                raise SyntaxError()
+            my_list = line.split(" ")
+            dic = {}
+            for i in range(1, len(my_list)):
+                elem = my_list[i]
+                kv = elem.split('=')
+                if len(kv) == 1 or "" in kv:
+                    continue
+                if len(kv) > 1 and kv[1][0] == '"':
+                    kv[1] = kv[1].strip('"').replace('_', ' ')
+                    if kv[1].count('"') != kv[1].count('\\\"'):
+                        continue
+                    else:
+                        kv[1] = kv[1].replace('\\', '')
+                try:
+                    kv[1] = eval(kv[1])
+                except:
+                    pass
+                if len(kv) == 2:
+                    dic[kv[0]] = kv[1]
+
+            if dic:
+                obj = eval("{}(**dic)".format(my_list[0]))
+            else:
+                obj = eval("{}()".format(my_list[0]))
+            obj.save()
+            print("{}".format(obj.id))
+
+        except SyntaxError:
             print("** class name missing **")
-            return
-        if c_name not in HBNBCommand.classes:
+        except NameError:
             print("** class doesn't exist **")
-            return
-        inst = HBNBCommand.classes[c_name]()
-        storage.save()
-        print(inst.id)
-        storage.save()
-        if len(args) > 1:
-            c_param = args[1:]
-            for param in c_param:
-                k = param.split('=')[0]
-                v = param.split('=')[1]
-                if '_' in v:
-                    v = v.replace('_', ' ')
-                g = c_name + ' ' + inst.id + ' ' + k + ' ' + v
-                self.do_update(g)
 
     def help_create(self):
         """ Help information for the create method """
