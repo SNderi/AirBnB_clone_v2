@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
 # Sets up the web servers for the deployment of web_static.
 
-REQUIRED_PKG="nginx"
-PKG_OK=$(dpkg-query -W -f='${Status}' $REQUIRED_PKG 2>/dev/null | grep -c "ok installed")
-if [ "$PKG_OK" -eq 0 ];
-then
-	apt-get -y update
-	apt-get -y install nginx
-	ufw allow 'Nginx HTTP'
-fi
-
+apt-get -y update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
 mkdir -p /data/web_static/shared/
 mkdir -p /data/web_static/releases/test/
 echo "<html>
