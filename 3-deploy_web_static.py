@@ -14,9 +14,8 @@ env.user = "ubuntu"
 def do_pack():
     """Function to compress files to .tgz"""
     local("mkdir -p versions")
-    filename = "versions/web_static_{}.tgz".format(datetime.strftime(
-                                                   datetime.now(),
-                                                   "%Y%m%d%H%M%S"))
+    today = datetime.now().strftime('%Y%m%d%H%M%S')
+    filename = "versions/web_static_{}.tgz".format(today)
     arch = local("tar -cvzf {} web_static".format(filename))
     if arch.succeeded:
         return filename
