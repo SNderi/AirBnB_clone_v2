@@ -8,7 +8,6 @@ from fabric.operations import local, run, put
 from datetime import datetime
 import os
 from fabric.api import env
-import re
 
 
 env.hosts = ['3.235.66.4', '3.235.223.210']

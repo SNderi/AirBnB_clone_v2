@@ -5,7 +5,6 @@ from fabric.operations import local, run, put
 from datetime import datetime
 import os
 from fabric.api import env
-import re
 
 
 env.hosts = ['3.235.66.4', '3.235.223.210']
@@ -53,7 +52,7 @@ def do_deploy(archive_path):
 
         # create a new symbolic link /data/web_static/current
         run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
-            .format(file_name))
+            .format(file_ame))
 
         print("New version deployed!")
         return True
