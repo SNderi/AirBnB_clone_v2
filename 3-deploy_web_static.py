@@ -14,11 +14,12 @@ env.user = "ubuntu"
 def do_pack():
     """Function to compress files to .tgz"""
     local("mkdir -p versions")
-    arch = local("tar -cvzf versions/web_static_{}.tgz web_static"
-                 .format(datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")),
-                 capture=True)
+    filename = "versions/web_static_{}.tgz".format(datetime.strftime(
+                                                   datetime.now(),
+                                                   "%Y%m%d%H%M%S"))
+    arch = local("tar -cvzf {} web_static".format(filename))
     if arch.succeeded:
-        return arch
+        return filename
     return None
 
 
@@ -65,4 +66,5 @@ def deploy():
     arch_path = do_pack()
     if arch_path is None:
         return False
-    return do_deploy(arch_path)
+    dep = do_deploy(arch_path)
+    return dep
