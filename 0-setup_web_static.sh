@@ -3,7 +3,7 @@
 
 REQUIRED_PKG="nginx"
 PKG_OK=$(dpkg-query -W -f='${Status}' $REQUIRED_PKG 2>/dev/null | grep -c "ok installed")
-if [ $PKG_OK -eq 0 ];
+if [ "$PKG_OK" -eq 0 ];
 then
 	apt-get -y update
 	apt-get -y install nginx

@@ -25,6 +25,7 @@ def do_pack():
         return arch
     return None
 
+
 def do_deploy(archive_path):
     """Function to distribute an archive to a server"""
     if not os.path.exists(archive_path):
@@ -59,5 +60,5 @@ def do_deploy(archive_path):
 
         print("New version deployed!")
         return True
-    except:
+    except Exception:
         return False

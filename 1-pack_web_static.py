@@ -3,6 +3,7 @@
 the web_static folder of the AirBnB Clone repo.
 """
 
+
 def do_pack():
     """Function to compress files to .tgz"""
     from fabric.operations import local

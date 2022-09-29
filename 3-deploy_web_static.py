@@ -60,6 +60,7 @@ def do_deploy(archive_path):
     except Exception:
         return False
 
+
 def deploy():
     """Creates and distributes an archive to a web server"""
     arch_path = do_pack()
