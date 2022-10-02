@@ -52,7 +52,7 @@ def do_deploy(archive_path):
 
         # create a new symbolic link /data/web_static/current
         run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
-            .format(file_ame))
+            .format(file_name))
 
         print("New version deployed!")
         return True
