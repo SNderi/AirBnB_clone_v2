@@ -12,9 +12,9 @@ def hello_hbnb():
 
 
 @app.route('/hbnb', strict_slashes=False)
-def shout_hbnb():
+def say_hbnb():
     """ Returns hbnb. """
-    return 'HBNB!'
+    return 'HBNB'
 
 
 if __name__ == '__main__':

@@ -8,13 +8,13 @@ app = Flask(__name__)
 @app.route('/', strict_slashes=False)
 def hello_hbnb():
     """ Returns Hello hbnb. """
-    return 'Hello, HBNB!'
+    return 'Hello HBNB!'
 
 
 @app.route('/hbnb', strict_slashes=False)
-def shout_hbnb():
+def say_hbnb():
     """ Returns hbnb. """
-    return 'HBNB!'
+    return 'HBNB'
 
 
 @app.route('/c/<text>', strict_slashes=False)
