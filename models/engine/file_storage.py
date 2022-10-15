@@ -10,10 +10,10 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-classes = { 'BaseModel': BaseModel, 'User': User, 'Place': Place,
-            'State': State, 'City': City, 'Amenity': Amenity,
-            'Review': Review
-}
+classes = {'BaseModel': BaseModel, 'User': User, 'Place': Place,
+           'State': State, 'City': City, 'Amenity': Amenity,
+           'Review': Review
+           }
 
 
 class FileStorage:
@@ -55,10 +55,10 @@ class FileStorage:
             with open(self.__file_path, 'r') as f:
                 temp = json.load(f)
             for key in temp:
-                self.__objects[key] = classes[temp[key]["__class__"]](**temp[key])
-        except:
+                self.__objects[key] = classes[temp[key]["__class__"]](
+                                                **temp[key])
+        except Exception:
             pass
-
 
     def delete(self, obj=None):
         """ deletes obj from __objects if it exists """
