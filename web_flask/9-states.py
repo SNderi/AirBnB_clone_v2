@@ -26,7 +26,7 @@ def states_id(id=None):
 @app.teardown_appcontext
 def closer(self):
     """ Removes the current SQLAlchemy Session. """
-    return storage.close()
+    storage.close()
 
 
 if __name__ == '__main__':
