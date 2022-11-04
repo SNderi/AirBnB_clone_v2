@@ -8,8 +8,10 @@ def do_pack():
     """Function to compress files to .tgz"""
     from fabric.operations import local
     from datetime import datetime
+    import os
 
-    local("mkdir -p versions")
+    if not os.path.exists("versions"):
+        local("mkdir -p versions")
     arch = local("tar -cvzf versions/web_static_{}.tgz web_static"
                  .format(datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")),
                  capture=True)
